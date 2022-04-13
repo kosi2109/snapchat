@@ -1,0 +1,17 @@
+.search{
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    clip-path: circle(100px at 100% -30%);
+    -webkit-clip-path: circle(100px at 100% -30%);
+    transition: all 0.5s ease-out;
+    pointer-events: none;
+    z-index: 100;
+    top: 0;
+}
+.search.open {
+    clip-path: circle(1000px at 90% -10%);
+    -webkit-clip-path: circle(1000px at 90% -10%);
+    pointer-events: all;
+}
