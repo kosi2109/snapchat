@@ -12,7 +12,7 @@ function MessageByAuth({message,showpic}) {
         </p>
       </div>
       <div className="flex items-end justify-center">
-        <div className="w-12 h-auto rounded-full overflow-hidden">
+        <div className="w-7 h-auto rounded-full overflow-hidden">
           {showpic &&  <img src={user.pic} alt="profile" className="w-full h-full" /> }
           
         </div>

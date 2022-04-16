@@ -4,7 +4,7 @@ function MessageByOther({message,showpic}) {
   return (
     <div className="w-full flex mb-1 pr-3">
       <div className="flex items-end justify-center">
-        <div className="w-12 h-auto rounded-full overflow-hidden">
+        <div className="w-7 h-auto rounded-full overflow-hidden">
           {showpic && <img src={message.sender.pic} alt="profile" className="w-full h-full" />}
           
         </div>

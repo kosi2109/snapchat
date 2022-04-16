@@ -12,9 +12,9 @@ import { Link } from 'react-router-dom'
 
 const UserList = () => {
   const [searchOpen, setSearchOpen] = useState(false)
-  const [chats, setChats] = useState([])
-  const {user,noti} = ChatState()
- 
+  
+  const {user,noti,chats, setChats} = ChatState()
+  
   const config = {
     headers: {'Authorization': `Bearer ${user?.token}`}
   }
@@ -31,7 +31,7 @@ const UserList = () => {
 
   useEffect(()=>{
     getChats()
-  },[user,noti])
+  },[user])
 
   return (
     <motion.div exit={{x:"-100%",transition:{ease:"easeIn"}}}>

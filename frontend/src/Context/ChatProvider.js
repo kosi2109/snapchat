@@ -11,6 +11,8 @@ function ChatProvider({children}) {
     const [selectChat,setSelectChat] = useState(null)
     const [openMenu, setOpenMenu] = useState(false);
     const [noti, setNoti] = useState([])
+    const [chats, setChats] = useState([])
+
     useEffect(()=>{
         const userInfo = localStorage.getItem('profile')
         if(userInfo){
@@ -18,7 +20,7 @@ function ChatProvider({children}) {
         }
     },[location])
   return (
-    <ChatContext.Provider value={{openMenu,setOpenMenu,noti,setNoti,setMessages,messages,user,selectChat,setSelectChat,activeUsers,setActiveUsers}}>
+    <ChatContext.Provider value={{chats, setChats,openMenu,setOpenMenu,noti,setNoti,setMessages,messages,user,selectChat,setSelectChat,activeUsers,setActiveUsers}}>
         {children}
     </ChatContext.Provider>
   )

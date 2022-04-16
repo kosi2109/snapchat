@@ -21,17 +21,19 @@ function Search({searchOpen,setSearchOpen}) {
       }
     },[searchOpen])
 
-
-    useEffect(()=>{
-      if(keyword !== ""){
-        setTimeout(()=>{
-          axios
+    const searchReq = ()=>{
+        axios
           .get(`http://localhost:5000/api/user?search=${keyword}`, config)
           .then((res) => {
             setUsers(res.data);
           })
           .catch((error) => console.log(error));
-        },1000)
+    }
+
+    useEffect(()=>{
+      if(keyword !== ""){
+        const delayFn = setTimeout(() => searchReq(), 1000);
+        return () => clearTimeout(delayFn);
       }
     },[keyword])
   return (
@@ -42,7 +44,7 @@ function Search({searchOpen,setSearchOpen}) {
         </div>
         <div>
           {users?.map(user => (
-            <SearchResult user={user}/>
+            <SearchResult key={user._id} user={user}/>
           ))}
         </div>
     </div>

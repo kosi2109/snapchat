@@ -20,11 +20,14 @@ function CreateGroupChat() {
   };
 
   const handleSubmit = (e) => {
-      e.preventDefault();
+    e.preventDefault();
     axios
       .post(
         `http://localhost:5000/api/chat/group`,
-        { gpName: gpNameRef.current.value, users: selectedUsers.map(u=> u._id) },
+        {
+          gpName: gpNameRef.current.value,
+          users: selectedUsers.map((u) => u._id),
+        },
         config
       )
       .then((res) => {
@@ -65,7 +68,7 @@ function CreateGroupChat() {
     >
       <ChatHeader title="Create Group Chat" />
       <div className="px-2 h-full">
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label htmlFor="gpName" className="mb-2">
               Group Name *
@@ -100,6 +103,7 @@ function CreateGroupChat() {
           )}
           {selectedUsers?.map((user) => (
             <div
+            key={user._id}
               onClick={() => removeUser(user._id)}
               className="bg-primary text-bgPrimary font-medium rounded-full inline-block py-1 px-3 mx-1"
             >

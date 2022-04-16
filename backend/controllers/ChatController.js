@@ -51,7 +51,7 @@ const accessChat = async (req, res) => {
       const fullChat = await Chat.findById(chat._id).populate(
         "users",
         "-password"
-      );
+      ).populate("groupAdmin", "-password");
       res.status(200).json(fullChat);
     } catch (error) {
       res.status(400);
@@ -70,7 +70,7 @@ const getChat = async (req, res) => {
       .populate({
         path: "latestMessage",
         populate: { path: "sender", select: "-password" },
-      });
+      }).populate("groupAdmin", "-password");
 
     return res.status(201).json(chat);
   } catch (error) {
@@ -103,7 +103,7 @@ const accessGroupChat = async (req, res) => {
       const fullChat = await Chat.findById(chat._id).populate(
         "users",
         "-password"
-      );
+      ).populate("groupAdmin", "-password");
       return res.status(200).json(fullChat);
     } catch (error) {
       return res.sendStatus(400).json(error);
@@ -111,4 +111,62 @@ const accessGroupChat = async (req, res) => {
   
 };
 
-module.exports = { allChats, accessChat, getChat , accessGroupChat};
+
+const removeUser = async(req,res)=>{
+  const {chatId ,userId} = req.body ;
+  try {
+    const chat = await Chat.findById(chatId).populate(
+      "users",
+      "-password"
+    ).populate("groupAdmin", "-password");
+    
+    if(!chat){
+      return res.status(401).json({error : "Chat Not Found"})
+    }
+    
+    if(String(chat.groupAdmin._id) !== String(req.user._id)){
+      return res.status(401).json({error : "You Are Not Authenticate to remove user ."})
+    }
+
+    if(String(chat.groupAdmin._id) === userId){
+      return res.status(401).json({error : "You Can't remove group admin ."})
+    }
+    
+    chat.users = chat.users.filter(user => String(user._id) !== userId)
+    chat.save()
+
+    return res.status(200).json(chat);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+const addUser = async(req,res)=>{
+  const {chatId ,addUsers} = req.body ;
+  try {
+    const chat = await Chat.findById(chatId).populate(
+      "users",
+      "-password"
+    ).populate("groupAdmin", "-password");
+    
+    if(!chat){
+      return res.status(401).json({error : "Chat Not Found"})
+    }
+    const users = chat.users.map(user=> String(user._id))
+    
+    addUsers.forEach(user=> {
+      const exist = users.includes(user._id)
+      if(!exist){
+        chat.users.push(user)
+      }
+    })
+    chat.save()
+    return res.status(200).json(chat);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { allChats, accessChat, getChat , accessGroupChat , removeUser , addUser};

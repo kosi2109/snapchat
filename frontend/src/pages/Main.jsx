@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Menu from "../components/Menu";
 import CreateGroupChat from "./CreateGroupChat";
+import ChatSetting from "./ChatSetting";
 
 const ENDPOINT = "http://localhost:5000";
 var socket;
@@ -93,6 +94,7 @@ function Main() {
           <Route path="/" element={<UserList />} />
           <Route path="/create-group-chat" element={<CreateGroupChat />} />
           <Route path="/:id" element={<Chat socket={socket} />} />
+          <Route path="/:id/settings" element={<ChatSetting />} />
         </Routes>
       </AnimatePresence>
     </>

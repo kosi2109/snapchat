@@ -13,8 +13,9 @@ function User({chat}) {
         <div className="w-20 p-2 relative flex justify-center items center">
           {chat.isGroupChat ?
             <div className="w-full h-auto grid grid-cols-2 grid-rows-2 bg-bgSecondary rounded-full p-1 overflow-hidden" >
-              {chat.users.slice(0,3).map(u=>(
+              {chat.users.slice(0,3).map((u,i)=>(
                  <img
+                 key={i}
                  className="w-full h-auto rounded-full"
                  src={u.pic}
                  alt="profile"

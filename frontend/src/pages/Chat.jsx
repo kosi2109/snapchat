@@ -60,14 +60,14 @@ function Chat({socket}) {
   return (
     <motion.div
       className="w-full h-full"
-      exit={{ x: "100%", transition: { ease: "easeIn" } }}
+      exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
-      <ChatHeader user={selectChat.isGroupChat ? selectChat.chatName : selectChat?.users?.filter(u=> u._id !== user._id)[0]} />
+      <ChatHeader />
       <div className="w-full py-16 h-full">
         <div ref={messgeRef} className="py-2 px-3 w-full max-h-full overflow-auto">
           {messages.map((message,i)=>{
             
-            if(message.sender._id === user._id){
+            if(message.sender?._id === user?._id){
               if(messages[i]?.sender?._id == messages[i+1]?.sender?._id){
                 return <MessageByAuth key={message._id} message={message} showpic={false} />
               }else{
