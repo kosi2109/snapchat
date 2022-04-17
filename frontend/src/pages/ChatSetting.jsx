@@ -3,25 +3,26 @@ import ChatHeader from "../components/ChatHeader";
 import { motion } from "framer-motion";
 import { ChatState } from "../Context/ChatProvider";
 import SearchResult from "../components/SearchResult";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Modal from "../components/Modal";
-
+import AddUserModal from "../components/AddUserModal";
+import GroupNameModal from "../components/GroupNameModal";
+import DeleteModal from "../components/DeleteModal";
+import {useGetLocalStorage} from '../utils/CustomHook'
+import { getSingleChat } from "../api";
 function ChatSetting() {
   const { id } = useParams();
-  const { selectChat, setSelectChat, user } = ChatState();
-  const { _id } = JSON.parse(localStorage.getItem("profile"));
-  const profile = selectChat?.users?.filter((u) => u._id !== _id)[0];
-  const [modalOpen, setModalOpen] = useState(false)
-
-  const config = {
-    headers: { Authorization: `Bearer ${user?.token}` },
-  };
-
+  const { selectChat, setSelectChat } = ChatState();
+  const user = useGetLocalStorage()
+  const profile = selectChat?.users?.filter((u) => u._id !== user._id)[0];
+  const [addUserOpen, setAddUserOpen] = useState(false);
+  const [openChangeModal, setOpenChangeModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+ 
   const chat = () => {
     if (user) {
-      axios
-        .get(`http://localhost:5000/api/chat/${id}`, config)
+      getSingleChat(id)
         .then((res) => {
           setSelectChat(res.data);
         })
@@ -34,7 +35,7 @@ function ChatSetting() {
       chat();
     }
   }, [user]);
-  
+
   return (
     <motion.div
       className="h-full"
@@ -63,16 +64,32 @@ function ChatSetting() {
             </>
           )}
         </div>
+        <button
+          onClick={() => setOpenDeleteModal(true)}
+          className="px-4 py-2 text-lg w-full text-left text-primary"
+        >
+          Delete Chat
+        </button>
+        {openDeleteModal && (
+          <DeleteModal setOpenDeleteModal={setOpenDeleteModal} />
+        )}
         {selectChat?.isGroupChat && (
-          <div className="flex flex-col items-start w-full p-2 h-full">
-            <button className="p-2 text-lg w-full text-left">
+          <div className="flex flex-col items-start w-full p-2 h-full overflow-y-auto">
+            <button
+              onClick={() => setOpenChangeModal(true)}
+              className="p-2 text-lg w-full text-left"
+            >
               Change Group Name
             </button>
-            <div className="w-full h-4/6 p-2">
+            <div className="w-full h-3/5 p-2">
               <div className="flex w-full justify-between">
                 <h5 className="text-xl">Members</h5>
-                <button onClick={()=>setModalOpen(true)} className="block text-white bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
-                Toggle modal
+                <button
+                  onClick={() => setAddUserOpen(true)}
+                  className="block text-bgPrimary bg-primary focus:outline-none font-medium rounded-lg text-sm px-3 py-2 text-center"
+                  type="button"
+                >
+                  Add User
                 </button>
               </div>
               <div className="h-full overflow-auto">
@@ -81,9 +98,11 @@ function ChatSetting() {
                 ))}
               </div>
             </div>
-            <Modal modalOpen ={modalOpen} setModalOpen={setModalOpen} />
+            {addUserOpen && <AddUserModal setAddUserOpen={setAddUserOpen} />}
+            {openChangeModal && (
+              <GroupNameModal setOpenChangeModal={setOpenChangeModal} />
+            )}
           </div>
-          
         )}
       </div>
     </motion.div>

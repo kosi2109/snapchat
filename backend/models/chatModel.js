@@ -1,4 +1,5 @@
 const mongoose  = require("mongoose");
+const Message = require("./messageModel");
 
 
 const chatSchema = mongoose.Schema({
@@ -11,6 +12,23 @@ const chatSchema = mongoose.Schema({
     },
     groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 })
+
+
+chatSchema.pre('remove', function(next) {
+  Message.find({ chat: this.id }, (err, messages) => {
+    if (err) {
+      next(err)
+    } else if (messages.length > 0) {
+      messages.forEach(message=>{
+        message.delete()
+      })
+      next()
+    } else {
+      next()
+    }
+  })
+})
+
 
 const Chat = mongoose.model("Chat", chatSchema);
 

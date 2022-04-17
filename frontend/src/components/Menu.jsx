@@ -8,7 +8,7 @@ export default function Menu() {
   const navigate = useNavigate();
   const menuRef = useRef();
   const logout = () => {
-    localStorage.removeItem("profile");
+    localStorage.removeItem("snapchat_profile");
     navigate("/auth", { replace: true });
   };
 

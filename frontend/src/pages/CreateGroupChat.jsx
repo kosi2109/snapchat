@@ -1,35 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatHeader from "../components/ChatHeader";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { ChatState } from "../Context/ChatProvider";
 import SearchResult from "../components/SearchResult";
 import { useNavigate } from "react-router-dom";
+import { useGetLocalStorage } from "../utils/CustomHook";
+import { createGroupAPI, userSearchAPI } from "../api";
 
 function CreateGroupChat() {
   const [keyword, setKeyword] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const { token, _id } = JSON.parse(localStorage.getItem("profile"));
+  const user = useGetLocalStorage();
   const navigate = useNavigate();
   const { setSelectChat } = ChatState();
   const gpNameRef = useRef();
 
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        `http://localhost:5000/api/chat/group`,
-        {
-          gpName: gpNameRef.current.value,
-          users: selectedUsers.map((u) => u._id),
-        },
-        config
-      )
+    createGroupAPI({ gpName: gpNameRef.current.value,users: selectedUsers.map((u) => u._id)})
       .then((res) => {
         setSelectChat(res.data);
         navigate(`/${res.data._id}`, { replace: true });
@@ -40,8 +29,7 @@ function CreateGroupChat() {
   useEffect(() => {
     if (keyword !== "") {
       setTimeout(() => {
-        axios
-          .get(`http://localhost:5000/api/user?search=${keyword}`, config)
+        userSearchAPI(keyword)
           .then((res) => {
             setUsers(res.data);
           })
@@ -103,7 +91,7 @@ function CreateGroupChat() {
           )}
           {selectedUsers?.map((user) => (
             <div
-            key={user._id}
+              key={user._id}
               onClick={() => removeUser(user._id)}
               className="bg-primary text-bgPrimary font-medium rounded-full inline-block py-1 px-3 mx-1"
             >

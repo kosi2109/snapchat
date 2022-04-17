@@ -1,22 +1,20 @@
-import React, { useRef, useState } from "react";
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerAPI } from "../api";
 
-
-function Register({setLogin}) {
-    const [form, setForm] = useState({
-        fullName : "",
-        email : "",
-        password : "",
-        password2 : ""
-    })
-    const [error, setError] = useState(null)
+function Register({ setLogin }) {
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/api/auth/register", form)
+    registerAPI(form)
       .then((res) => {
         localStorage.setItem("profile", JSON.stringify(res.data));
         navigate("/", { replace: true });
@@ -24,18 +22,18 @@ function Register({setLogin}) {
       .catch((error) => setError(error.response.data.error));
   };
 
-  const handleChange = (e)=>{
+  const handleChange = (e) => {
     setForm({
-        ...form,
-        [e.target.name] : e.target.value
-    })
-  }
-  console.log(form);
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <>
       <h5 className="text-2xl text-primary font-medium mb-12">Register</h5>
       <form onSubmit={handleSubmit} className="flex flex-col">
-      <label htmlFor="name">Full Name</label>
+        <label htmlFor="name">Full Name</label>
         <input
           id="name"
           type="text"
@@ -77,10 +75,9 @@ function Register({setLogin}) {
           Register
         </button>
       </form>
-      <p onClick={()=>setLogin(true)} className="mt-3">
+      <p onClick={() => setLogin(true)} className="mt-3">
         Already have an account ? SignIn
       </p>
-      
     </>
   );
 }

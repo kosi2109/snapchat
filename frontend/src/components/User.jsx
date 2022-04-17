@@ -49,7 +49,7 @@ function User({chat}) {
           </div>
           <div className="w-full whitespace-normal h-12 overflow-hidden">
             <p>
-              {latestMessage?.content ? latestMessage?.content : "adasdas"}
+              {latestMessage?.content && latestMessage?.content}
             </p>
           </div>
         </div>

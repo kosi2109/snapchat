@@ -1,23 +1,20 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiFillMessage, AiOutlineCloseCircle } from "react-icons/ai";
 import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { accessChat, removeUserAPI } from "../api";
 import { ChatState } from "../Context/ChatProvider";
+import { useGetLocalStorage } from "../utils/CustomHook";
 
 function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
-  const { token, _id } = JSON.parse(localStorage.getItem("profile"));
+  const { _id } = useGetLocalStorage()
   const navigate = useNavigate();
   const { setSelectChat , selectChat } = ChatState();
   const [canRemove, setCanRemove] = useState(false)
 
 
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
   const chatHandle = () => {
-    axios
-      .post(`http://localhost:5000/api/chat`, { userId: user._id }, config)
+    accessChat( { userId: user._id })
       .then((res) => {
         setSelectChat(res.data);
         navigate(`/${res.data._id}`, { replace: true });
@@ -26,8 +23,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
   };
 
   const removeUser = ()=>{
-    axios
-    .post(`http://localhost:5000/api/chat/remove-user`, { chatId: selectChat?._id , userId : user?._id }, config)
+    removeUserAPI({ chatId: selectChat?._id , userId : user?._id })
     .then((res) => {
       setSelectChat(res.data);
     })
@@ -36,7 +32,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
 
 
   useEffect(()=>{
-    if(selectChat?.groupAdmin._id === _id){
+    if(selectChat?.isGroupChat && selectChat?.groupAdmin._id === _id){
       setCanRemove(true)
     }else{
       setCanRemove(false)

@@ -1,22 +1,21 @@
 import React, { useRef } from "react";
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import {  useNavigate } from "react-router-dom";
+import { loginAPI } from "../api";
 
-function Login({setLogin}) {
-    const emailRef = useRef()
-    const passRef = useRef()
-    const navigate = useNavigate()
-    
-    const handleSubmit= (e)=>{
-        e.preventDefault();
-        axios.post('http://localhost:5000/api/auth/login',{email:emailRef.current.value,password:passRef.current.value})
-        .then((res)=> {
-            localStorage.setItem('profile',JSON.stringify(res.data))
-            navigate('/',{replace:true})
-        })
-        .catch((error)=> console.log(error))
-    }
+function Login({ setLogin }) {
+  const emailRef = useRef();
+  const passRef = useRef();
+  const navigate = useNavigate();
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    loginAPI({ email: emailRef.current.value, password: passRef.current.value })
+      .then((res) => {
+        localStorage.setItem("snapchat_profile", JSON.stringify(res.data));
+        navigate("/", { replace: true });
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
@@ -42,7 +41,7 @@ function Login({setLogin}) {
           Login
         </button>
       </form>
-      <p onClick={()=>setLogin(false)} className="mt-3">
+      <p onClick={() => setLogin(false)} className="mt-3">
         Don't have any account ? SignUp
       </p>
     </>

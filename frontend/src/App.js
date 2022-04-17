@@ -2,11 +2,11 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Main from "./pages/Main";
-import 'flowbite';
+
 
 function App() {
   const ProtectedRoute = ({ children }) => {
-    const pf = localStorage.getItem("profile");
+    const pf = localStorage.getItem("snapchat_profile");
     if (!pf) {
       return <Navigate to="/auth" replace />;
     }

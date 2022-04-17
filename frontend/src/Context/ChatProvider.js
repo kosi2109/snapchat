@@ -14,7 +14,7 @@ function ChatProvider({children}) {
     const [chats, setChats] = useState([])
 
     useEffect(()=>{
-        const userInfo = localStorage.getItem('profile')
+        const userInfo = localStorage.getItem('snapchat_profile')
         if(userInfo){
             setUser(JSON.parse(userInfo))
         }

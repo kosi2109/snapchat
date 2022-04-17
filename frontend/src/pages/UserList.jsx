@@ -8,20 +8,17 @@ import { ChatState } from '../Context/ChatProvider'
 import {IoMdAdd} from "react-icons/io"
 import { BsFillPeopleFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
+import { getUsersAPI } from '../api'
 
 
 const UserList = () => {
   const [searchOpen, setSearchOpen] = useState(false)
   
-  const {user,noti,chats, setChats} = ChatState()
+  const {user,chats, setChats} = ChatState()
   
-  const config = {
-    headers: {'Authorization': `Bearer ${user?.token}`}
-  }
-
   const getChats = ()=>{
     if(user){
-      axios.get('http://localhost:5000/api/chat',config)
+      getUsersAPI()
       .then((res)=> {
         setChats(res.data);
       })
