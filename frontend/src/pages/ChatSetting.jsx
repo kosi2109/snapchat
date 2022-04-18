@@ -11,6 +11,7 @@ import GroupNameModal from "../components/GroupNameModal";
 import DeleteModal from "../components/DeleteModal";
 import {useGetLocalStorage} from '../utils/CustomHook'
 import { getSingleChat } from "../api";
+import RemoveUserModal from "../components/RemoveUserModal";
 function ChatSetting() {
   const { id } = useParams();
   const { selectChat, setSelectChat } = ChatState();
@@ -19,7 +20,9 @@ function ChatSetting() {
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [openChangeModal, setOpenChangeModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
- 
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
+  const [selectUser, setSelectUser] = useState(null)
+  
   const chat = () => {
     if (user) {
       getSingleChat(id)
@@ -42,7 +45,7 @@ function ChatSetting() {
       exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
       <ChatHeader showSetting={false} />
-      <div className="pt-20 h-full">
+      <div className="pt-20 h-full md:w-3/6 md:mx-auto">
         <div className="w-full flex flex-col items-center justify-center">
           {selectChat?.isGroupChat ? (
             <>
@@ -94,7 +97,7 @@ function ChatSetting() {
               </div>
               <div className="h-full overflow-auto">
                 {selectChat?.users?.map((user) => (
-                  <SearchResult key={user._id} user={user} removeBtn={true} />
+                  <SearchResult key={user._id} user={user} removeBtn={true} setSelectUser={setSelectUser} setOpenRemoveModal={setOpenRemoveModal} />
                 ))}
               </div>
             </div>
@@ -102,6 +105,7 @@ function ChatSetting() {
             {openChangeModal && (
               <GroupNameModal setOpenChangeModal={setOpenChangeModal} />
             )}
+            {openRemoveModal && <RemoveUserModal setOpenRemoveModal={setOpenRemoveModal} selectUser={selectUser} />}
           </div>
         )}
       </div>

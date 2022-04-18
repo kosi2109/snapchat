@@ -38,8 +38,8 @@ export default function Menu() {
     <div
       className={
         openMenu
-          ? "bg-bgPrimary flex flex-col justify-between p-3 items-center absolute w-3/4 h-screen translate-x-0 shadow duration-700"
-          : "bg-bgPrimary flex flex-col justify-between p-3 items-center absolute w-3/4 h-screen -translate-x-full duration-700"
+          ? "bg-bgPrimary flex flex-col justify-between p-3 items-center absolute w-3/4 md:w-1/4 h-screen translate-x-0 shadow duration-700"
+          : "bg-bgPrimary flex flex-col justify-between p-3 items-center absolute w-3/4 md:w-1/4 h-screen -translate-x-full duration-700"
       }
       style={{ zIndex: 200 }}
       ref={menuRef}

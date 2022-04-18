@@ -46,8 +46,8 @@ function AddUserModal({ setAddUserOpen }) {
   };
   return (
     <Modal>
-      <div className="relative px-4 w-full max-w-2xl h-full md:h-auto">
-        <div className="relative bg-white border drop-shadow rounded-lg dark:bg-gray-700">
+      <div className="bg-bgPrimary relative shadow-md border rounded-md w-full max-w-2xl md:h-auto">
+        <div className="relative bg-white dark:bg-gray-700">
           <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
             <h3 className="text-xl lg:text-2xl">Add User to Group</h3>
             <button
@@ -77,9 +77,10 @@ function AddUserModal({ setAddUserOpen }) {
                 id="search"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                className="p-2 w-full h-11 rounded-md mb-4 focus:border-none focus:outline-none"
+                className="p-2 w-full h-16 rounded-md mb-4 focus:border-none focus:outline-none"
                 type="text"
                 autoComplete="off"
+                placeholder="Name or Email"
               />
             </div>
 

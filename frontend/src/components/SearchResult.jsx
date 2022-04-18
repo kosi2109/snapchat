@@ -6,7 +6,7 @@ import { accessChat, removeUserAPI } from "../api";
 import { ChatState } from "../Context/ChatProvider";
 import { useGetLocalStorage } from "../utils/CustomHook";
 
-function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
+function SearchResult({ user, chat = true, selectUser, removeBtn = false , setOpenRemoveModal , setSelectUser }) {
   const { _id } = useGetLocalStorage()
   const navigate = useNavigate();
   const { setSelectChat , selectChat } = ChatState();
@@ -22,13 +22,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
       .catch((error) => console.log(error));
   };
 
-  const removeUser = ()=>{
-    removeUserAPI({ chatId: selectChat?._id , userId : user?._id })
-    .then((res) => {
-      setSelectChat(res.data);
-    })
-    .catch((error) => console.log(error));
-  }
+  
 
 
   useEffect(()=>{
@@ -40,7 +34,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
   },[selectChat])
 
   return (
-    <div className="flex justify-between items-center p-3 border-b border-border">
+    <div className="flex justify-between items-center p-3 border-b border-border drop-shadow-none">
       <div className="flex items-center">
         <img className="w-10 h-10 rounded-full" src={user?.pic} alt="img" />
         
@@ -54,7 +48,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false }) {
         <>
         {canRemove &&
         <button>
-          <AiOutlineCloseCircle onClick={removeUser} className="text-primary" size={25} />
+          <AiOutlineCloseCircle onClick={()=>{setOpenRemoveModal(true);setSelectUser(user)}} className="text-primary" size={25} />
         </button>
          }
         </>

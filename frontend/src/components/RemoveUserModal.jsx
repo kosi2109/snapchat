@@ -1,34 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { deleteChatAPI } from "../api";
+import { removeUserAPI } from "../api";
 import { ChatState } from "../Context/ChatProvider";
 import Modal from "./Modal";
 
-function DeleteModal({ setOpenDeleteModal }) {
-  const navigate = useNavigate();
-  const { selectChat, setSelectChat, setMessages } = ChatState();
-  
-  const deleteChat = () => {
-    if (selectChat) {
-      deleteChatAPI({ chatId: selectChat._id })
+function RemoveUserModal({setOpenRemoveModal,selectUser}) {
+    const { setSelectChat , selectChat } = ChatState();
+
+    const removeUser = ()=>{
+        removeUserAPI({ chatId: selectChat?._id , userId : selectUser?._id })
         .then((res) => {
-          if (res.data.success) {
-            setMessages([]);
-            setSelectChat(null);
-            navigate("/", { replace: true });
-          }
+          setSelectChat(res.data);
+          setOpenRemoveModal(false)
         })
         .catch((error) => console.log(error));
-    }
-  };
+      }
+
   return (
     <Modal>
       <div className="bg-bgPrimary relative shadow-md border rounded-md w-full max-w-2xl md:h-auto">
         <div className="relative bg-white dark:bg-gray-700">
           <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-            <h3 className="text-xl lg:text-2xl">Delete Comfirm</h3>
+            <h3 className="text-xl lg:text-2xl">Remove Comfirm</h3>
             <button
-              onClick={() => setOpenDeleteModal(false)}
+              onClick={() => setOpenRemoveModal(false)}
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-toggle="default-modal"
@@ -48,9 +42,9 @@ function DeleteModal({ setOpenDeleteModal }) {
             </button>
           </div>
           <div className="p-3 flex flex-col items-center">
-            <h5 className="text-2xl mb-3">Are You Sure to Delete ?</h5>
+            <h5 className="text-xl mb-3">Are You Sure to Remove {selectUser.fullName} ?</h5>
             <button
-              onClick={deleteChat}
+              onClick={removeUser}
               className="w-5/6 text-bgPrimary font-medium py-2 text-lg bg-primary rounded-md"
             >
               Comfirm
@@ -62,4 +56,4 @@ function DeleteModal({ setOpenDeleteModal }) {
   );
 }
 
-export default DeleteModal;
+export default RemoveUserModal;

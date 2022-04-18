@@ -52,14 +52,14 @@ function Chat({ socket }) {
 
   return (
     <motion.div
-      className="w-full h-full"
+      className="w-full h-full backdrop-blur-sm" 
       exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
       <ChatHeader />
-      <div className="w-full py-16 h-full">
+      <div className="w-full h-full">
         <div
           ref={messgeRef}
-          className="py-2 px-3 w-full max-h-full overflow-auto"
+          className="py-20 px-3 w-full md:shadow-lg md:w-3/6 md:mx-auto h-full bg-bgPrimary overflow-auto"
         >
           {messages.map((message, i) => {
             if (message.sender?._id === user?._id) {

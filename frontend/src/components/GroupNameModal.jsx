@@ -23,8 +23,8 @@ function GroupNameModal({ setOpenChangeModal }) {
   };
   return (
     <Modal>
-      <div className="relative px-4 w-full max-w-2xl h-full md:h-auto">
-        <div className="relative bg-white border drop-shadow rounded-lg dark:bg-gray-700">
+      <div className="relative w-full max-w-2xl md:h-auto bg-bgPrimary shadow-md border rounded-md">
+        <div className="relative bg-white rounded-lg dark:bg-gray-700">
           <div className="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
             <h3 className="text-xl lg:text-2xl">Add User to Group</h3>
             <button
