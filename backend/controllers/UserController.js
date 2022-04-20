@@ -1,3 +1,4 @@
+const generateToken = require("../config/generateToken");
 const User = require("../models/userModel");
 
 
@@ -15,7 +16,21 @@ const allUsers = async (req, res) => {
     res.send(users);
   };
 
+const updateUser = async(req ,res)=>{
+  const {pic} = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id,{pic},{new:true})
+    return res.status(201).json({
+      _id : user._id,
+      email : user.email,
+      fullName : user.fullName,
+      pic : user.pic,
+      token : generateToken(user._id)
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
-
-module.exports = {allUsers}
+module.exports = {allUsers , updateUser}

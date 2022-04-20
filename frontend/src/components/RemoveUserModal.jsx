@@ -4,13 +4,15 @@ import { ChatState } from "../Context/ChatProvider";
 import Modal from "./Modal";
 
 function RemoveUserModal({setOpenRemoveModal,selectUser}) {
-    const { setSelectChat , selectChat } = ChatState();
+    const { setSelectChat , selectChat , setLoading } = ChatState();
 
     const removeUser = ()=>{
+      setOpenRemoveModal(false)
+      setLoading(true)
         removeUserAPI({ chatId: selectChat?._id , userId : selectUser?._id })
         .then((res) => {
           setSelectChat(res.data);
-          setOpenRemoveModal(false)
+          setLoading(false)
         })
         .catch((error) => console.log(error));
       }

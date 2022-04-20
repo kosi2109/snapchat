@@ -7,25 +7,30 @@ import MessageByOther from "../components/MessageByOther";
 import { ChatState } from "../Context/ChatProvider";
 import { useParams } from "react-router-dom";
 import { getMessagesAPI, getSingleChat } from "../api";
+import Loading from "../components/Loading";
 
 function Chat({ socket }) {
   const { id } = useParams();
   const messgeRef = useRef();
-  const { selectChat, setSelectChat, user, messages, setMessages } = ChatState();
+  const { selectChat, setSelectChat, user, messages, setMessages ,setLoading , loading } = ChatState();
 
   const getMessages = () => {
+    setLoading(true)
     getMessagesAPI(id)
       .then((res) => {
         setMessages(res.data);
+        setLoading(false)
       })
       .catch((error) => console.log(error));
   };
 
   const chat = () => {
     if (user) {
-      getSingleChat()
+      setLoading(true)
+      getSingleChat(id)
         .then((res) => {
           setSelectChat(res.data);
+          setLoading(false)
         })
         .catch((error) => console.log(error));
     }
@@ -56,7 +61,9 @@ function Chat({ socket }) {
       exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
       <ChatHeader />
+      {loading && <Loading/>}
       <div className="w-full h-full">
+        
         <div
           ref={messgeRef}
           className="py-20 px-3 w-full md:shadow-lg md:w-3/6 md:mx-auto h-full bg-bgPrimary overflow-auto"

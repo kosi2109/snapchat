@@ -3,30 +3,35 @@ import React, { useEffect, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import SearchResult from "./SearchResult";
 import { addUserAPI, userSearchAPI } from "../api";
+import ReactLoading from "react-loading";
 
 function AddUserModal({ setAddUserOpen }) {
   const [keyword, setKeyword] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-
-  const { selectChat, setSelectChat } = ChatState();
+  const [searchLoading, setSearchLoading] = useState(false);
+  const { selectChat, setSelectChat, setLoading } = ChatState();
 
   const addUser = () => {
+    setAddUserOpen(false);
+    setLoading(true);
     addUserAPI({ chatId: selectChat?._id, addUsers: selectedUsers })
       .then((res) => {
         setSelectChat(res.data);
         setSelectedUsers([]);
-        setAddUserOpen(false);
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
     if (keyword !== "") {
+      setSearchLoading(true);
       setTimeout(() => {
         userSearchAPI(keyword)
           .then((res) => {
             setUsers(res.data);
+            setSearchLoading(false);
           })
           .catch((error) => console.log(error));
       }, 1000);
@@ -99,15 +104,26 @@ function AddUserModal({ setAddUserOpen }) {
               ))}
             </div>
 
-            <div className="h-3/6 overflow-y-auto">
-              {users?.map((user, i) => (
-                <SearchResult
-                  key={i}
-                  user={user}
-                  chat={false}
-                  selectUser={selectUser}
+            <div className="h-3/6 overflow-y-auto flex flex-col items-center">
+              {searchLoading ? (
+                <ReactLoading
+                  type="spin"
+                  color="red"
+                  width={30}
+                  className="my-3"
                 />
-              ))}
+              ) : (
+                <>
+                  {users?.map((user, i) => (
+                    <SearchResult
+                      key={i}
+                      user={user}
+                      chat={false}
+                      selectUser={selectUser}
+                    />
+                  ))}
+                </>
+              )}
             </div>
           </div>
 

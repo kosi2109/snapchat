@@ -3,10 +3,12 @@ import "./Search.css";
 import { IoArrowBackOutline } from "react-icons/io5";
 import SearchResult from "./SearchResult";
 import { userSearchAPI } from "../api";
+import ReactLoading from 'react-loading';
 
 function Search({ searchOpen, setSearchOpen }) {
   const [keyword, setKeyword] = useState("");
   const [users, setUsers] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false)
   const inputRef = useRef();
 
   useEffect(() => {
@@ -16,9 +18,11 @@ function Search({ searchOpen, setSearchOpen }) {
   }, [searchOpen]);
 
   const searchReq = () => {
+    setSearchLoading(true)
     userSearchAPI(keyword)
       .then((res) => {
         setUsers(res.data);
+        setSearchLoading(false)
       })
       .catch((error) => console.log(error));
   };
@@ -49,7 +53,10 @@ function Search({ searchOpen, setSearchOpen }) {
           ref={inputRef}
         />
       </div>
-      <div>
+      <div className="flex flex-col items-center">
+        {searchLoading && 
+        <ReactLoading type='spin' color='red' width={30} className="my-3" />
+        }
         {users?.map((user) => (
           <SearchResult key={user._id} user={user} />
         ))}

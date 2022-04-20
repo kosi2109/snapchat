@@ -1,11 +1,13 @@
 import React, { useRef } from "react";
 import {  useNavigate } from "react-router-dom";
 import { loginAPI } from "../api";
+import { ChatState } from "../Context/ChatProvider";
 
 function Login({ setLogin }) {
   const emailRef = useRef();
   const passRef = useRef();
   const navigate = useNavigate();
+  const {setError} = ChatState()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +16,7 @@ function Login({ setLogin }) {
         localStorage.setItem("snapchat_profile", JSON.stringify(res.data));
         navigate("/", { replace: true });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => setError(error.response.data.error));
   };
 
   return (

@@ -12,9 +12,10 @@ import DeleteModal from "../components/DeleteModal";
 import {useGetLocalStorage} from '../utils/CustomHook'
 import { getSingleChat } from "../api";
 import RemoveUserModal from "../components/RemoveUserModal";
+import Loading from "../components/Loading";
 function ChatSetting() {
   const { id } = useParams();
-  const { selectChat, setSelectChat } = ChatState();
+  const { selectChat, setSelectChat , loading , setLoading } = ChatState();
   const user = useGetLocalStorage()
   const profile = selectChat?.users?.filter((u) => u._id !== user._id)[0];
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -25,9 +26,11 @@ function ChatSetting() {
   
   const chat = () => {
     if (user) {
+      setLoading(true)
       getSingleChat(id)
         .then((res) => {
           setSelectChat(res.data);
+          setLoading(false)
         })
         .catch((error) => console.log(error));
     }
@@ -45,6 +48,7 @@ function ChatSetting() {
       exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
       <ChatHeader showSetting={false} />
+      {loading && <Loading/>}
       <div className="pt-20 h-full md:w-3/6 md:mx-auto">
         <div className="w-full flex flex-col items-center justify-center">
           {selectChat?.isGroupChat ? (

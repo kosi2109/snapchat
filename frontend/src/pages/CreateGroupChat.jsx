@@ -6,6 +6,8 @@ import SearchResult from "../components/SearchResult";
 import { useNavigate } from "react-router-dom";
 import { useGetLocalStorage } from "../utils/CustomHook";
 import { createGroupAPI, userSearchAPI } from "../api";
+import Loading from "../components/Loading";
+import ReactLoading from "react-loading";
 
 function CreateGroupChat() {
   const [keyword, setKeyword] = useState("");
@@ -13,14 +15,20 @@ function CreateGroupChat() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const user = useGetLocalStorage();
   const navigate = useNavigate();
-  const { setSelectChat } = ChatState();
+  const { setSelectChat, loading, setLoading } = ChatState();
   const gpNameRef = useRef();
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
-    createGroupAPI({ gpName: gpNameRef.current.value,users: selectedUsers.map((u) => u._id)})
+    createGroupAPI({
+      gpName: gpNameRef.current.value,
+      users: selectedUsers.map((u) => u._id),
+    })
       .then((res) => {
         setSelectChat(res.data);
+        setLoading(true);
         navigate(`/${res.data._id}`, { replace: true });
       })
       .catch((error) => console.log(error));
@@ -28,10 +36,12 @@ function CreateGroupChat() {
 
   useEffect(() => {
     if (keyword !== "") {
+      setSearchLoading(true);
       setTimeout(() => {
         userSearchAPI(keyword)
           .then((res) => {
             setUsers(res.data);
+            setSearchLoading(false);
           })
           .catch((error) => console.log(error));
       }, 1000);
@@ -54,8 +64,9 @@ function CreateGroupChat() {
       className="w-full h-full pt-20 h-screen overflow-y-auto"
       exit={{ x: "100%", transition: { ease: "easeIn" } }}
     >
-      <ChatHeader title="Create Group Chat" />
-      <div className="px-2 h-full">
+      <ChatHeader title="Create Group Chat"  />
+      {loading && <Loading />}
+      <div className="px-2 h-full md:w-1/2 md:mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label htmlFor="gpName" className="mb-2">
@@ -99,15 +110,21 @@ function CreateGroupChat() {
             </div>
           ))}
         </div>
-        <div className="h-3/6 overflow-y-auto">
-          {users?.map((user, i) => (
-            <SearchResult
-              key={i}
-              user={user}
-              chat={false}
-              selectUser={selectUser}
-            />
-          ))}
+        <div className="h-3/6 overflow-y-auto flex flex-col items-center">
+          {searchLoading ? (
+            <ReactLoading type="spin" color="red" width={30} className="my-3" />
+          ) : (
+            <>
+              {users?.map((user, i) => (
+                <SearchResult
+                  key={i}
+                  user={user}
+                  chat={false}
+                  selectUser={selectUser}
+                />
+              ))}
+            </>
+          )}
         </div>
       </div>
     </motion.div>

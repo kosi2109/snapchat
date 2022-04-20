@@ -5,18 +5,20 @@ import Modal from "./Modal";
 
 function GroupNameModal({ setOpenChangeModal }) {
   const gpNameRef = useRef();
-  const { selectChat, setSelectChat, user } = ChatState();
+  const { selectChat, setSelectChat, setLoading } = ChatState();
 
   const changeGroupName = () => {
     if (selectChat) {
+      
+      setOpenChangeModal(false);
+      setLoading(true)
       changeGroupNameAPI({
         chatId: selectChat._id,
         name: gpNameRef.current.value,
       })
         .then((res) => {
           setSelectChat(res.data);
-          setOpenChangeModal(false);
-          gpNameRef.current.value = "";
+          setLoading(false)
         })
         .catch((error) => console.log(error));
     }

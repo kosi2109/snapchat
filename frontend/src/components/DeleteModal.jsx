@@ -6,15 +6,18 @@ import Modal from "./Modal";
 
 function DeleteModal({ setOpenDeleteModal }) {
   const navigate = useNavigate();
-  const { selectChat, setSelectChat, setMessages } = ChatState();
+  const { selectChat, setSelectChat, setMessages , setLoading } = ChatState();
   
   const deleteChat = () => {
     if (selectChat) {
+      setOpenDeleteModal(false)
+      setLoading(true)
       deleteChatAPI({ chatId: selectChat._id })
         .then((res) => {
           if (res.data.success) {
             setMessages([]);
             setSelectChat(null);
+            setLoading(false)
             navigate("/", { replace: true });
           }
         })

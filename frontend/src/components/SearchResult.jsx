@@ -34,7 +34,7 @@ function SearchResult({ user, chat = true, selectUser, removeBtn = false , setOp
   },[selectChat])
 
   return (
-    <div className="flex justify-between items-center p-3 border-b border-border drop-shadow-none">
+    <div className="flex justify-between items-center w-full p-3 border-b border-border drop-shadow-none">
       <div className="flex items-center">
         <img className="w-10 h-10 rounded-full" src={user?.pic} alt="img" />
         

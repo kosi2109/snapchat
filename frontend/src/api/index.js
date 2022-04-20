@@ -25,3 +25,4 @@ export const changeGroupNameAPI = (data) => API.post(`/chat/changeGroupName`,dat
 export const deleteChatAPI = (data) => API.post(`http://localhost:5000/api/chat/delete`,data);
 export const sentMessageAPI = (data) => API.post('http://localhost:5000/api/message',data);
 export const addUserAPI = (data) => API.post(`http://localhost:5000/api/chat/add-user`,data);
+export const updateUserAPI = (data) => API.post(`http://localhost:5000/api/user/update`,data);

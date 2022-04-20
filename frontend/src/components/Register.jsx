@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerAPI } from "../api";
+import { ChatState } from "../Context/ChatProvider";
 
 function Register({ setLogin }) {
   const [form, setForm] = useState({
@@ -9,14 +10,14 @@ function Register({ setLogin }) {
     password: "",
     password2: "",
   });
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const {setError} = ChatState()
 
   const handleSubmit = (e) => {
     e.preventDefault();
     registerAPI(form)
       .then((res) => {
-        localStorage.setItem("profile", JSON.stringify(res.data));
+        localStorage.setItem("snapchat_profile", JSON.stringify(res.data));
         navigate("/", { replace: true });
       })
       .catch((error) => setError(error.response.data.error));
@@ -70,7 +71,6 @@ function Register({ setLogin }) {
           onChange={handleChange}
           className="border border-primary outline-none p-2 w-full h-11 rounded-md mb-4"
         />
-        <p className="text-primary my-3 text-center">{error && error}</p>
         <button className="bg-primary my-3 p-2 text-bgPrimary font-medium text-lg rounded-xl">
           Register
         </button>

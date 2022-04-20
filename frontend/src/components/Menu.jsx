@@ -1,12 +1,38 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ChatState } from "../Context/ChatProvider";
+import { MdModeEditOutline } from "react-icons/md";
+import axios from "axios";
+import { updateUserAPI } from "../api";
+import ReactLoading from "react-loading";
 
 export default function Menu() {
-  const { openMenu, setOpenMenu, user } = ChatState();
+  const { openMenu, setOpenMenu, user, setUser } = ChatState();
   const navigate = useNavigate();
   const menuRef = useRef();
+  const [imageUpload, setImageUpload] = useState(false);
+
+  const uploadImage = (e) => {
+    setImageUpload(true);
+    const data = new FormData();
+    data.append("file", e.target.files[0]);
+    data.append("upload_preset", "kosi_chatapp");
+    data.append("cloud_name", "kosi1999");
+    axios
+      .post("https://api.cloudinary.com/v1_1/kosi1999/image/upload", data)
+      .then(({ data }) => {
+        updateUserAPI({ pic: data.url })
+          .then(({ data }) => {
+            localStorage.setItem("snapchat_profile", JSON.stringify(data));
+            setUser(data);
+            setImageUpload(false);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  };
+
   const logout = () => {
     localStorage.removeItem("snapchat_profile");
     navigate("/auth", { replace: true });
@@ -32,7 +58,7 @@ export default function Menu() {
     }, [ref]);
   }
 
-  useOutsideAlerter(menuRef,setOpenMenu)
+  useOutsideAlerter(menuRef, setOpenMenu);
 
   return (
     <div
@@ -51,8 +77,29 @@ export default function Menu() {
         <AiFillCloseCircle size={30} />
       </button>
       <div className="w-full flex flex-col items-center">
-        <div className="w-24 my-2">
-          <img src={user?.pic} className="w-full" alt="" />
+        <div className="w-24 h-24 my-2 relative rounded-full border-2 border-primary p-2 flex items-center justify-center">
+          <label htmlFor="profile" className="w-24 h-24 flex items-center justify-center block">
+              {imageUpload ? (
+                <ReactLoading type="spin" color="red" width={20} />
+              ) : (
+                <img
+                  src={user?.pic}
+                  className="w-20 h-20 rounded-full z-1"
+                  alt="profile"
+                />
+              )}
+            
+          </label>
+          <div className="absolute top-1 right-1 z-20">
+            <MdModeEditOutline />
+          </div>
+          <input
+            type="file"
+            id="profile"
+            className="hidden"
+            accept=".png, .jpg, .jpeg"
+            onChange={uploadImage}
+          />
         </div>
         <h5 className="text-xl font-medium">{user?.fullName}</h5>
         <h5 className="text-lg text-primary">{user?.email}</h5>

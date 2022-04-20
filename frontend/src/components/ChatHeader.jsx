@@ -15,10 +15,10 @@ function ChatHeader({ title, showSetting = true }) {
       <div onClick={()=> navigate(-1)}>
         <IoArrowBackOutline className="text-primary" size={30} />
       </div>
-      <h5 className="text-xl font-medium">
+      {!title ? <>
+        <h5 className="text-xl font-medium">
         {showSetting ? 
           <>
-            {title && title}
             {selectChat?.isGroupChat ? selectChat?.chatName : user?.fullName}
           </>
         :
@@ -44,6 +44,15 @@ function ChatHeader({ title, showSetting = true }) {
       ) : (
         <div  className="w-8 h-8"></div>
       )}
+      </> : 
+        <>
+        <h5 className="text-xl font-medium">
+          {title}
+        </h5>
+        <div  className="w-8 h-8"></div>
+        </>
+      }
+      
     </Header>
   );
 }

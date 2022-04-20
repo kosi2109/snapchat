@@ -9,18 +9,21 @@ import {IoMdAdd} from "react-icons/io"
 import { BsFillPeopleFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { getUsersAPI } from '../api'
+import Loading from '../components/Loading'
 
 
 const UserList = () => {
   const [searchOpen, setSearchOpen] = useState(false)
   
-  const {user,chats, setChats} = ChatState()
+  const {user,chats, setChats , loading , setLoading} = ChatState()
   
   const getChats = ()=>{
+    setLoading(true)
     if(user){
       getUsersAPI()
       .then((res)=> {
         setChats(res.data);
+        setLoading(false)
       })
       .catch((error)=> console.log(error))
     }
@@ -34,7 +37,8 @@ const UserList = () => {
     <motion.div exit={{x:"-100%",transition:{ease:"easeIn"}}}>
     <Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
     <HomeHeader setSearchOpen={setSearchOpen}/>
-    <div className='bg-bg-Primary flex flex-col h-screen w-screen justify-start items-center overflow-y-auto pt-16' style={{zIndex:1}}>
+    {loading && <Loading/>}
+    <div className='bg-bg-Primary flex flex-col h-screen w-screen justify-start items-center overflow-y-auto pt-16'>
       {chats.map(chat =>(
         <User key={chat._id} chat={chat}/>
       ))}
