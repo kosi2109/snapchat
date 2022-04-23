@@ -23,7 +23,6 @@ function Auth() {
           }
         );
       };
-      console.log(error);
       useEffect(()=>{
           if(error){
               showToast(error)
