@@ -1,0 +1,7 @@
+export const LOGIN = "LOGIN"
+export const AUTH_ERROR = "AUTH_ERROR"
+export const CLEAR_ERR = "CLEAR_ERR"
+export const ACTIVE_USERS = "ACTIVE_USERS"
+export const AUTH_LOADING = "AUTH_LOADING"
+export const END_AUTH_LOADING = "END_AUTH_LOADING"
+export const UPDATE_PROFILE = "UPDATE_PROFILE"

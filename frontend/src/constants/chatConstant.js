@@ -1,0 +1,8 @@
+export const GET_CHATS = "GET_CHATS"
+export const CHAT_LOADING = "CHAT_LOADING"
+export const END_CHAT_LOADING = "END_CHAT_LOADING"
+export const SELECT_CHAT = "SELECT_CHAT"
+export const ACCESS_CHAT = "ACCESS_CHAT"
+export const CREATE_GP_CHAT = "CREATE_GP_CHAT"
+export const ADD_USER_TO_GP = "ADD_USER_TO_GP"
+export const DELETE_CHAT = "DELETE_CHAT"

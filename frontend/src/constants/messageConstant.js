@@ -1,0 +1,5 @@
+export const GET_MESSAGES = "GET_MESSAGES"
+export const MESSAGE_LOADING = "MESSAGE_LOADING"
+export const END_MESSAGE_LOADING = "END_MESSAGE_LOADING"
+export const SENT_MESSAGE = "SENT_MESSAGE"
+export const GET_NOTI = "GET_NOTI"
