@@ -59,7 +59,7 @@ function Chat({ typers, socket }) {
       exit={{ x: "-100%", transition: { ease: "easeIn" } }}
     >
       <ChatHeader uri='/' />
-      {loading || (!selectChat && <Loading />)}
+      {(loading || !selectChat) && <Loading />}
       <div className="w-full h-full ">
         <div
           ref={messgeRef}
