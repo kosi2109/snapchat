@@ -46,8 +46,8 @@ function Auth() {
         draggable
         pauseOnHover
       />
-        <div className='flex items-center justify-center h-1/6 bg-primary'>
-            <div className='bg-primary p-2 flex flex-col items-center justify-center'>
+        <div className='flex items-center overflow-hidden justify-center h-1/6 bg-primary'>
+            <div className='bg-primary p-2 h-full flex flex-col items-center justify-center'>
                 <BsChatFill size={35} color='white' />
                 <h5 className='text-bgPrimary font-bold text-3xl'>Snap Chat</h5>
             </div>
